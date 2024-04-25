@@ -1,3 +1,7 @@
+library(MASS)     
+library(car) 
+library(ROCR)
+
 #LDA
 
 data1=read.csv("C://Users//SAKSHI//Desktop//Practicals//stats prac//datasets//breast-cancer.csv")    
