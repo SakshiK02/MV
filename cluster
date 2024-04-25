@@ -1,0 +1,52 @@
+library(factoextra)
+library(cluster)
+library(NbClust)
+
+data <- read.csv("C://Users//SAKSHI//Desktop//Practicals//stats prac//datasets//Life Expectancy Data.csv")
+str(data)
+data$Country = as.numeric(as.factor(data$Country))
+data$Status = as.numeric(as.factor(data$Status))
+data1<- data[c(4)]
+data <- data[ -c(4) ]
+colSums(is.na(data))
+data<-na.omit(data)
+
+df = scale(data)
+
+d <- dist(df, method = "euclidean")
+## View Only first 6 rows and columns
+as.matrix(d)[1:6,1:6]
+
+# Compute the dissimilarity matrix # df = the standardized data
+res.dist <- dist(df, method = "euclidean")
+
+kmeans(df, centers=2, iter.max = 10, nstart = 25)
+kmeans(df, centers=3, iter.max = 10, nstart = 25)
+kmeans(df, centers=4, iter.max = 10, nstart = 25)
+
+# Visualize the optimal number of clusters based on the silhouette method
+fviz_nbclust(data,FUN=hcut, method = "silhouette")
+
+#Average
+metode_al = hclust(dist(df),method = "average")
+hc_ave = cophenetic(metode_al)
+cor.ave = cor(as.dist(dist(df)),hc_ave)
+
+#Single
+metode_sl = hclust(dist(df),method = "single")
+hc_sl = cophenetic(metode_sl)
+cor.sl = cor(as.dist(dist(df)),hc_sl)
+
+#Complete
+metode_cl = hclust(dist(df),method = "complete")
+hc_cl = cophenetic(metode_cl)
+cor.cl = cor(as.dist(dist(df)),hc_cl)
+
+cbind.data.frame(cor.ave,cor.sl,cor.cl)
+
+plot(metode_al)
+rect.hclust(metode_al,2)
+
+library(factoextra)
+km <- kmeans(df, centers = 2, nstart = 25) 
+fviz_cluster(km, data = df)
