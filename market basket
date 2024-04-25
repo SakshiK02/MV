@@ -1,0 +1,39 @@
+install.packages("arules")
+library(arules)
+
+# Read the CSV file
+data <- read.transactions("C://Users//SAKSHI//Desktop//Practicals//stats prac//datasets//groceries.csv", format = "basket", sep = ",", rm.duplicates = TRUE)
+summary(data)
+# Convert the data frame to a transactions object
+gross_trx <- as(data, "transactions")
+
+# Plot item frequency
+itemFrequencyPlot(data,
+                  type = "absolute",
+                  topN = 10,
+                  horiz = TRUE,
+                  main = 'Absolute item frequency')
+
+library(arules)
+
+# Print the rules
+inspect(rules)
+library(arules)
+install.packages("arulesViz")
+library(arulesViz)
+
+
+
+# Mine association rules
+rules <- apriori(data, parameter = list(supp = 0.001, conf = 0.5))
+
+# Sort the rules by lift
+rules_lift_sorted <- sort(rules, by = "confidence", decreasing = TRUE)
+
+# Subset the top 10 rules
+top_10_rules <- head(rules_lift_sorted, 10)
+
+inspect(top_10_rules)
+
+# Plot the top 10 association rules
+plot(top_10_rules, method = "graph")
