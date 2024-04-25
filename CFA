@@ -1,0 +1,11 @@
+
+library(lavaan)
+library(semPlot)
+HS.model <- 'visual =~ x1+x2+x3
+texture =~ x4+x5+x6
+speed =~ x7+x8+x9'
+
+fit2 <- cfa(HS.model, data = HolzingerSwineford1939)
+summary(fit2, standardized = TRUE)
+semPaths(fit2, whatLabels = "est", style = "lisrel", main = "SEM Diagram")
+semPaths(fit2, "std", layout = "tree2")
