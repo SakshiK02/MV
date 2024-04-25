@@ -1,0 +1,48 @@
+install.packages("DescTools")
+library(DescTools)
+
+data1 <- read.csv("C://Users//SAKSHI//Desktop//Practicals//stats prac//datasets//ap_train.csv")
+data1
+str(data1)
+
+data1$Gender <- as.numeric(as.factor(data1$Gender))
+data1$Customer.Type <- as.numeric(as.factor(data1$Customer.Type))
+data1$Type.of.Travel <- as.numeric(as.factor(data1$Type.of.Travel))
+data1$Class <- as.numeric(as.factor(data1$Class))
+data1$satisfaction <- as.factor(data1$satisfaction)
+
+str(data1)
+
+colSums(is.na(data1))
+data1 <- na.omit(data1)
+colSums(is.na(data1))
+data1 <-data1[3:25]
+
+boxplot(data1)
+
+str(data1)
+
+data1$Flight.Distance <- Winsorize(data1$Flight.Distance)
+data1$Arrival.Delay.in.Minutes <- Winsorize(data1$Arrival.Delay.in.Minutes)
+data1$Departure.Delay.in.Minutes <- Winsorize(data1$Departure.Delay.in.Minutes)
+
+boxplot(data1)
+
+model1 <- glm(satisfaction ~ ., family = binomial, data = data1)
+summary(model1)
+
+Fmodel1 <- glm(satisfaction ~ Customer.Type + Age + Type.of.Travel + Inflight.wifi.service +
+                 Departure.Arrival.time.convenient + Ease.of.Online.booking +
+                 Online.boarding + Seat.comfort + On.board.service + Leg.room.service +
+                 Baggage.handling + Checkin.service + Inflight.service + Cleanliness + Departure.Delay.in.Minutes +
+                 Arrival.Delay.in.Minutes, family = binomial, data = data1)
+summary(Fmodel1)
+
+dp1 <- predict(model1, type = "response")
+dp1
+p1 <- ifelse(dp1 > 0.5, 1, 0)
+p1
+m1 <- table(data1$satisfaction, p1)
+m1
+Accuracy1 <- sum(diag(m1)) / sum(m1)
+Accuracy1
