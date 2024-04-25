@@ -1,0 +1,55 @@
+#LDA
+
+data1=read.csv("C://Users//SAKSHI//Desktop//Practicals//stats prac//datasets//breast-cancer.csv")    
+data1    
+dim(data1)    
+str(data1) 
+data1  =  data1[,2:31]
+str(data1)
+colSums(is.na(data1))    
+data1$diagnosis  =  as.factor(data1$diagnosis)    
+str(data1)   
+
+b=boxplot(data1)    
+actual_lda  =  lda(diagnosis  ~  .  ,  data=data1)    
+actual_lda   
+
+predicted_lda  =  predict(actual_lda)    
+predicted_lda 
+
+ldahist(data  =  predicted_lda$x,g  =  data1$diagnosis)    
+plot(predicted_lda$x,  col  =  as.numeric(data1$diagnosis),  pch  =  19,xlab  =  "LD1",  ylab  =  
+       "LD2",  main  =  "Scatter  Plot  of  LDA")    
+
+install.packages("caret")    
+library("caret")    
+mean(predicted_lda$class==data1$diagnosis)  
+a=confusionMatrix(predicted_lda$class,data1$diagnosis)    
+a
+
+
+#QDA
+
+actual_qda  =  qda(diagnosis  ~  .  ,  data=data1)    
+actual_qda    
+predicted_qda  =  predict(actual_qda)    
+predicted_qda    
+mean(predicted_qda$class==data1$diagnosis)  
+b=confusionMatrix(predicted_qda$class,data1$diagnosis)  
+b   
+
+#ROC
+
+# Make predictions on the training set
+predictions_lda <- as.numeric(predict(model)$class)
+predictions_qda <- as.numeric(predict(actual_qda)$class)
+library(pROC)
+# Create ROC curves
+roc_lda <- roc(data1$diagnosis, predictions_lda)
+roc_qda <- roc(data1$diagnosis, predictions_qda)
+# Plot ROC curves
+plot(roc_lda, col = "blue", main = "ROC Curves", lwd = 2, col.main = "black", ylim
+     = c(0, 1), xlim = c(0, 1), xlab = "False Positive Rate", ylab = "True Positive Rate")
+lines(roc_qda, col = "red", lwd = 2)
+# Add legend
+legend("bottomright", legend = c("LDA", "QDA"), col = c("blue", "red"), lwd = 2)
