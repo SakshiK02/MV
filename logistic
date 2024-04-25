@@ -22,9 +22,9 @@ boxplot(data1)
 
 str(data1)
 
-data1$Flight.Distance <- Winsorize(data1$Flight.Distance)
-data1$Arrival.Delay.in.Minutes <- Winsorize(data1$Arrival.Delay.in.Minutes)
-data1$Departure.Delay.in.Minutes <- Winsorize(data1$Departure.Delay.in.Minutes)
+data1$Flight.Distance <- Winsorize(data1$Flight.Distance, probs = c(0.05, 0.95))
+data1$Arrival.Delay.in.Minutes <- Winsorize(data1$Arrival.Delay.in.Minutes, probs = c(0.05, 0.95))
+data1$Departure.Delay.in.Minutes <- Winsorize(data1$Departure.Delay.in.Minutes, probs = c(0.05, 0.95))
 
 boxplot(data1)
 
