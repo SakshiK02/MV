@@ -1,0 +1,63 @@
+library(readxl)
+FactorAnalysis <- read_xlsx("C://Users//SAKSHI//Desktop//Practicals//stats prac//datasets//FactorAnalysis.xlsx")
+FactorAnalysis
+str(FactorAnalysis)
+
+library(corrplot)
+c=cor(FactorAnalysis)
+corrplot(c)
+
+library(psych)
+
+model <- fa(c,5,rotate="promax")
+L=model$loadings
+fa.diagram(L)
+
+data = eigen(c)
+data$values
+plot(data$values,type = "b")
+
+KMO(FactorAnalysis)
+bartlett.test(FactorAnalysis)
+cronbach.alpha(FactorAnalysis)
+
+
+#PCA
+
+library(readxl)
+library(ggcorrplot)
+library(corrr)
+library(FactoMineR)
+library(factoextra)
+
+factoanalysis<-  read_excel("C:/Users/SAKSHI/Desktop/Practicals/stats prac/datasets/FactorAnalysis.xlsx")
+factoanalysis
+str(factoanalysis)
+
+colSums(is.na(factoanalysis))
+
+#scaling data
+norm_data <- scale(factoanalysis)
+head(norm_data)
+
+#correlation matrix
+corr_matrix <- cor(norm_data)
+corr_matrix
+
+#plotting correlation matrix
+ggcorrplot(corr_matrix)
+#applying PCA
+data.pca <- princomp(corr_matrix)
+summary(data.pca)
+
+#concentration on cumulative proportion
+data.pca$loadings[,1:3]
+
+#visualize Principle componants through screeplot
+fviz_eig(data.pca, addlabels = TRUE)
+#biplot to visualize simmilatrities & dissimilarities between variables
+fviz_pca_var(data.pca, col.var = "brown")
+#contribution of each variable
+fviz_cos2(data.pca, choice = "var", axes = 1:2)
+#biplot combined with cos2 
+fviz_pca_var(data.pca, col.var = "cos2", gradient.cols = c("black", "orange","green"), repel = TRUE)
